@@ -11,24 +11,36 @@ def findShopee(page, keyword1, keyword2, keyword3):
     else:
         url = 'https://shopee.tw/search?keyword={}%20{}%20{}&page={}'.format(keyword1,keyword2,keyword3,page)
     
-    '''抓取網址內容'''
     headers = {'user-agent': 'Googlebot'}
     r = requests.get(url, headers=headers) 
     soup = BeautifulSoup(r.text, 'html.parser')
     
     '''設定抓取內容'''
     contents = soup.find_all("div", class_="_1NoI8_ _16BAGk")
-    prices = soup.find_all("span", class_="_341bF0")
+    prices = soup.find_all("div", class_="_1w9jLI _37ge-4 _2ZYSiu")
     all_items = soup.find_all("div", class_="col-xs-2-4 shopee-search-item-result__item")
     links = [i.find('a').get('href') for i in all_items]
     
+    '''因為有些是價格範圍，所以要特別取出來'''
+    price = []
+    for i in range(len(prices)):
+        a = []
+        for item in prices[i]:
+            a.extend(list(item))
+        if len(a)>2:
+            price.append('{}{} ~ {}{}'.format(a[0],a[1],a[5],a[6]))
+        else:
+            price.append('{}{}'.format(a[0],a[1]))
+            
+    
     '''寫入csv檔案'''
-    with open('output{}.csv'.format(page), 'w', newline='', encoding='utf-8') as csvfile:
+    with open('output{}.csv'.format(page), 'w', newline='', encoding='utf-8-sig') as csvfile:
         fieldnames = ['商品', '價格', '網址']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
-        for c, p, l in zip(contents, prices, links):
-          writer.writerow({'商品': c.contents[0], '價格': p.contents[0], '網址': 'https://shopee.tw/'+l})
+        for i in range(len(price)):
+          writer.writerow({'商品': list(contents[i])[0], '價格': price[i], '網址': 'https://shopee.tw/'+links[i]})
+
         
-for i in range(1):
+for i in range(5):
     findShopee(i, '日檢', 'N2', '單字')
