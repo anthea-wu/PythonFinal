@@ -40,9 +40,14 @@ def findShopee(page, keyword1, keyword2, keyword3):
         fieldnames = ['商品', '價格1', '價格2', '網址']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
+<<<<<<< Updated upstream
         for i in range(len(price1)):
             writer.writerow({'商品': list(contents[i])[0], '價格1': price1[i], '價格2': price2[i], '網址': 'https://shopee.tw/'+links[i]})
 
         
+=======
+        for i in range(len(price)):
+          writer.writerow({'商品': list(contents[i])[0], '價格': price[i], '網址': 'https://shopee.tw/'+links[i]})
+>>>>>>> Stashed changes
 for i in range(5):
     findShopee(i, '日檢', 'N2', '單字')
