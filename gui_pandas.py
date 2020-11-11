@@ -11,7 +11,7 @@ import pandas as pd
 root = Tk()
 root.title("Shopee_Gui")
 root.geometry("1260x780")
-Style().configure("Treeview",rowheight = 320)
+Style().configure("Treeview",rowheight = 200)
 
 def readImage(url):
     img_bytes = urlopen(url).read()#讀取url
