@@ -1,8 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 import csv
-import os
-import time
 
 '''
 def download_img(link,i,page):
@@ -49,15 +47,15 @@ def findShopee(page, keyword1, keyword2, keyword3):
 
     '''寫入csv檔案'''
     with open('output{}.csv'.format(page), 'w', newline='', encoding='utf-8-sig') as csvfile:
-        fieldnames = ['圖片','商品', '價格1', '價格2', '網址']
+        fieldnames = ['商品', '價格1', '價格2', '網址', '圖片']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for i in range(len(price1)):
             #download_img(picture_link[i]) #新增擺放圖片的資料夾
-            writer.writerow({'圖片':pictures_link[i],'商品': list(contents[i])[0], 
+            writer.writerow({'商品': list(contents[i])[0], 
                              '價格1': price1[i], '價格2': price2[i], 
-                             '網址': 'https://shopee.tw/'+links[i]})
-            time.sleep(0.2)
+                             '網址': 'https://shopee.tw/'+links[i],
+                             '圖片':pictures_link[i]})
     
 for i in range(5):
     findShopee(i, '日檢', 'N2', '單字')
