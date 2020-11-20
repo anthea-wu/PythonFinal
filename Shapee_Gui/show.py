@@ -12,6 +12,7 @@ import io
 import pandas as pd
 #from choosepage import ChoosePage
 import choosepage
+import webbrowser
 
 class Climb_Frame(Frame): 
     def __init__(self, master=None):
@@ -28,7 +29,6 @@ class Climb_Frame(Frame):
         self.canvas.destroy()
         self.page1.destroy()
         self.destroy()
-        #ChoosePage(self.root)
         choosepage.ChoosePage(self.root)
     def start_climb(self):
         Label(self.page1, text = "爬蟲已完成").grid(row=3, stick=W,padx = 400, pady=10)
@@ -61,21 +61,15 @@ class Climb_Frame(Frame):
             price1 = []
             price2 = []
             for i in range(len(prices)):
-                #print(prices)
-                print("({})".format(i),end="")
                 a = []
                 for item in prices[i]:
                     a.extend(list(item))
-                    print(a)
                     if len(a)>6:
                         price2.pop()
                         price2.append(a[6])
                     else:
                         if len(a)==2:
-                            price1.append(a[1])
-                            price2.append(a[1])
-            print(price1[0])
-            print(price2[0])            
+                            price1.append(a[1])            
             #寫入csv檔案
             with open('output_{}.csv'.format(page), 'w', newline='', encoding='utf-8-sig') as csvfile:
                 fieldnames = ['商品', '價格1', '價格2', '網址', '圖片']
@@ -147,6 +141,7 @@ class Tree_Frame(Frame):
         self.var1 = BooleanVar()
         self.createPage()
         self.putimage = []
+        #self.website = []
     def createPage(self):
         Combobox(self, textvariable = self.var,value = ('1', '2', '3', '4','5')).grid(row=0,stick=W,padx = 280, pady=10)
         self.var.set('請選擇')
@@ -155,9 +150,7 @@ class Tree_Frame(Frame):
         Checkbutton(self,text="價格排序",variable = self.var1).grid(row=0,stick=W,padx=560)
         Button(self,text="返回",command=lambda:self.clear_frame2()).grid(row=0,padx = 640)
     def clear_frame2(self):
-        #self.page1.destroy()
         self.destroy()
-        #ChoosePage(self.root)
         choosepage.ChoosePage(self.root)
     def readImage(self,url):
         img_bytes = urlopen(url).read()#讀取url
@@ -182,7 +175,6 @@ class Tree_Frame(Frame):
         tree.heading("#2", text = "價格")
         
         tree.grid(row = 3,stick = S+W,padx = 80)
-        #tree.pack(side=TOP)
         page = self.var.get()
         if page == '1':
             #data = pd.read_csv('./output_0.csv')#pandas 開啟 csv檔案
@@ -221,16 +213,27 @@ class Tree_Frame(Frame):
                 price = '{}~{}'.format(data.iloc[i][1],data.iloc[i][2])
             else:
                 price = data.iloc[i][1]
-            tree.insert("",'end',image = self.putimage[-1],values=(data.iloc[i][0],
+            tree.insert("",'end',image = self.putimage[-1],text="",values=(data.iloc[i][0],
                                                 price,data.iloc[i][3]))
-            '''
-
-            tree.insert("",'end',image = self.putimage[-1],
-                        values=(data.iloc[i][1],data.iloc[i][2]))
-            '''
             tree.update()
             time.sleep(0.1)
+        tree.bind("<Double-1>",self.double_click)
         scrollbar.config(command=tree.yview)
 
-  
+    def double_click(self,event):
+        e = event.widget
+        iid = e.identify("item",event.x,event.y)
+        url = e.item(iid,"values")[2]
+        #預設瀏覽器位置(r'瀏覽器路徑')
+        #mozillapath = r'C:\Program Files (x86)\Mozilla Firefox\firefox.exe'
         
+        #宣告瀏覽器名稱
+        #webbrowser.register('Firefox',None,webbrowser.BackgroundBrowser(mozillapath))
+        
+        #開啟網頁 new = 1 開啟新分頁 2 = 開啟新tab
+        #webbrowser.get('Firefox').open(url,new=1,autoraise=True)
+        
+        #開啟網頁(使用電腦預設的瀏覽器)
+        webbrowser.open(url,new=1,autoraise=True)
+        
+  
