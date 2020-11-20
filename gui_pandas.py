@@ -30,10 +30,12 @@ tree.heading("#1", text = "商品")
 tree.heading("#2", text = "價格")
 tree.heading("#3", text = "網址")
 #設定欄位寬度與顯示位置
+
 tree.column("#0",anchor = W,width = 250)
 tree.column("#1",anchor = W,width = 450)
 tree.column("#2",anchor = CENTER,width = 110)
 tree.column("#3",anchor = W,width = 450)
+
 
 putimage= []
 data = pd.read_csv('./sorted0.csv')#pandas 開啟 csv檔案
@@ -42,13 +44,13 @@ for i in range(0,data.shape[0]):
      pil_image2 = pil_image.resize((186,186),Image.ANTIALIAS)#resize 修改大小
      imgobj = ImageTk.PhotoImage(pil_image2) #photoImage轉換
      putimage.append(imgobj) #放進list
-     
      if data.iloc[i][1]!=data.iloc[i][2]:
          price = '{}~{}'.format(data.iloc[i][1],data.iloc[i][2])
      else:
          price = data.iloc[i][1]
      tree.insert("",'end',image = putimage[-1],values=(data.iloc[i][0],
                                         price,data.iloc[i][3]))
+
      #insert treeview
      #注意 如果執行發現error:img???(???為任意數字) does not exist 
      #請重新刪除 image = putimage[-1] 執行一次，並關閉程式後再補回執行

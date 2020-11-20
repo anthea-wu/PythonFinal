@@ -31,6 +31,7 @@ def findShopee(page, keyword1, keyword2, keyword3):
     prices = soup.find_all("div", class_="_1w9jLI _37ge-4 _2ZYSiu")
     all_items = soup.find_all("div", class_="col-xs-2-4 shopee-search-item-result__item")
     links = [i.find('a').get('href') for i in all_items]
+    
     '''因為有些是價格範圍，所以要特別取出來'''
     price1 = []
     price2 = []
@@ -38,6 +39,7 @@ def findShopee(page, keyword1, keyword2, keyword3):
         a = []
         for item in prices[i]:
             a.extend(list(item))
+            print(a)
         if len(a)>2:
             price1.append(a[1])
             price2.append(a[6])
@@ -45,6 +47,8 @@ def findShopee(page, keyword1, keyword2, keyword3):
             price1.append(a[1])
             price2.append(a[1])
 
+    print(len(price1))
+    print(len(price2))
     '''寫入csv檔案'''
     with open('output{}.csv'.format(page), 'w', newline='', encoding='utf-8-sig') as csvfile:
         fieldnames = ['商品', '價格1', '價格2', '網址', '圖片']
@@ -59,3 +63,4 @@ def findShopee(page, keyword1, keyword2, keyword3):
     
 for i in range(5):
     findShopee(i, '日檢', 'N2', '單字')
+print("done")
