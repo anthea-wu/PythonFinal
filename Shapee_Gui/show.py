@@ -31,7 +31,7 @@ class Climb_Frame(Frame):
         self.destroy()
         choosepage.ChoosePage(self.root)
     def start_climb(self):
-        Label(self.page1, text = "爬蟲已完成").grid(row=3, stick=W,padx = 400, pady=10)
+        Label(self.page1, text = "csv檔案資料製作完成").grid(row=3, stick=W,padx = 370, pady=10)
         Button(self.page1,text = "價格排序",command=lambda:self.sortPrice(5)).grid(row=3,stick=W,padx = 500,pady=10)
         start = time.time()
         for page in range(5):
@@ -50,7 +50,6 @@ class Climb_Frame(Frame):
             soup = BeautifulSoup(r.text, 'html.parser')
         
             #設定抓取內容
-            print(soup)
             pictures = soup.find_all("div",class_="_39-Tsj _1tDEiO")
             pictures_link = [i.find('img').get('src') for i in pictures]
             contents = soup.find_all("div", class_="_1NoI8_ _16BAGk")
@@ -65,7 +64,6 @@ class Climb_Frame(Frame):
                 a = []
                 for item in prices[i]:
                     a.extend(list(item))
-                    print(a)
                     if len(a)>6:
                         price2.pop()
                         price2.append(a[6])
@@ -164,7 +162,8 @@ class Tree_Frame(Frame):
         csvfile = ''
         Style().configure("Treeview",rowheight = 130)    
         #建立捲動條
-        scrollbar = Scrollbar()
+        scrollbar = Scrollbar(self,orient="vertical")
+        scrollbar.place(x=920,y=40,width=20,height = 540)
         #建立treeview(此height 代表顯示欄位數量 非欄位寬(rowheight))
         tree = Treeview(self,height = 4,columns = ("商品","價格"),
                         yscrollcommand=scrollbar.set)
@@ -180,7 +179,6 @@ class Tree_Frame(Frame):
         tree.grid(row = 3,stick = S+W,padx = 80)
         page = self.var.get()
         if page == '1':
-            #data = pd.read_csv('./output_0.csv')#pandas 開啟 csv檔案
             if self.var1.get() == True:
                 csvfile = './sorted0.csv'
             else:
