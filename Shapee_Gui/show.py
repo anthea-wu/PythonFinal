@@ -50,6 +50,7 @@ class Climb_Frame(Frame):
             soup = BeautifulSoup(r.text, 'html.parser')
         
             #設定抓取內容
+            print(soup)
             pictures = soup.find_all("div",class_="_39-Tsj _1tDEiO")
             pictures_link = [i.find('img').get('src') for i in pictures]
             contents = soup.find_all("div", class_="_1NoI8_ _16BAGk")
@@ -64,12 +65,14 @@ class Climb_Frame(Frame):
                 a = []
                 for item in prices[i]:
                     a.extend(list(item))
+                    print(a)
                     if len(a)>6:
                         price2.pop()
                         price2.append(a[6])
                     else:
                         if len(a)==2:
-                            price1.append(a[1])            
+                            price1.append(a[1])
+                            price2.append(a[1])
             #寫入csv檔案
             with open('output_{}.csv'.format(page), 'w', newline='', encoding='utf-8-sig') as csvfile:
                 fieldnames = ['商品', '價格1', '價格2', '網址', '圖片']
